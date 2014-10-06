@@ -12,7 +12,7 @@ var jsonURL = "http://gis.nola.gov:6080/arcgis/rest/services/Staging/Historic/Ma
   //Populate Metadata
   $.getJSON(jsonURL, function( data ) {
     $('#layer-name').text(data.name);
-    $('#header').text(data.name);
+    $('#service-title').text(data.name);
     $('#description').text(data.description);
   });
 
