@@ -1,0 +1,84 @@
+<html>
+<head>
+  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+  <link href="css/custom.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="http://js.arcgis.com/3.10/"></script>
+</head>
+<body>
+<div class="container">     
+<div class="span12">
+  <h1><p id="header"></p></h1>
+<ul class="nav nav-tabs" id="myTab">
+  <li class="active"><a href="#meta">Metadata</a></li>
+  <li onclick="loadMap()"><a href="#maptab">Map</a></li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="meta">
+    <p><b>Name:</b> <span id = "layer-name"></span></p>
+    <p><b>Description:</b> <span id = "description"></span><br></p>
+    <p><b>Service URL:</b> <span id = "service"></span><br></p>
+  </div>
+  <div class="tab-pane" id="maptab">
+    <div id="nola-map"></div>
+  </div>
+</div>
+</div> 
+</div>
+</body>
+<footer>
+<script>
+
+  var jsonURL = "http://gis.nola.gov:6080/arcgis/rest/services/Staging/Historic/MapServer/2?f=pjson";
+  var layer = jsonURL.split(/\?/)[0];
+  var restService = layer.split(/\/*\d$/)[0];
+  var layerID = layer.split(/\/*\d/)[1];
+
+  //Tab display control
+  $('#myTab a').click(function (e) {
+  e.preventDefault();
+  $(this).tab('show');
+})
+  
+  //Populate Metadata
+  $.getJSON(jsonURL, function( data ) {
+    $('#layer-name').text(data.name);
+    $('#header').text(data.name);
+    $('#description').text(data.description);
+  });
+
+  $('#service').html("<a href='" + restService + "' target='_blank'>" + restService + "</a>")
+
+  //Map Control
+  function loadMap(){
+    var map;
+    require(["esri/map", 
+      "esri/layers/ArcGISDynamicMapServiceLayer", 
+      "esri/layers/ArcGISTiledMapServiceLayer",
+      "dojo/domReady!"], 
+
+    function(Map,
+      ArcGISDynamicMapServiceLayer,
+      ArcGISTiledMapServiceLayer) {
+      
+    var service = new ArcGISDynamicMapServiceLayer(restService);
+    service.setVisibleLayers([0]);
+    var basemap = new ArcGISTiledMapServiceLayer("http://gis.nola.gov:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
+  
+    map = new Map("nola-map", {
+      center: [-90.030, 29.98], // longitude, latitude
+      zoom: 12,
+      logo: false
+    });
+      map.addLayer(basemap);
+      map.addLayer(service);
+  });
+  };
+
+
+</script>
+</footer>
+
+</html>
