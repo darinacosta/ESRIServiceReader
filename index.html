@@ -8,10 +8,17 @@
   <script src="http://js.arcgis.com/3.10/"></script>
 </head>
 <body>
-  <div id="banner"><img src="img/logo.gif"></div>
+  <div id="banner"><a href="https://data.nola.gov/"><img src="img/logo.gif"></a></div>
 <div class="container">     
 <div class="span12">
-  <h1><p id="service-title"></p></h1>
+  <div id="title-container">
+    <div style="float:left;">
+      <h2><p id="service-title"></p></h2>
+    </div>
+    <div id="download-button">
+      <img src="img/download.png">
+    </div>
+  </div>
 <ul class="nav nav-tabs" id="myTab">
   <li class="active"><a href="#meta">Metadata</a></li>
   <li onclick="loadMap()"><a href="#maptab">Map</a></li>

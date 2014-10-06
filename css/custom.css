@@ -9,11 +9,23 @@
 
 #nola-map, .map { 
   width: 100%;
-  height: 700px;
+  height: 600px;
 }
 
 #service-title {
   padding:10px 0; 
+}
+
+#title-container {
+  float: left;
+  clear: none; 
+  width:100%;
+}
+
+#download-button {
+  float: right;
+  padding-top: 20px;
+  padding-right: 20px;
 }
 
 
