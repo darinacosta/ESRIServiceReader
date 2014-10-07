@@ -1,37 +1,67 @@
-var jsonURL = "http://gis.nola.gov:6080/arcgis/rest/services/Staging/Historic/MapServer/2?f=pjson";
-  var layer = jsonURL.split(/\?/)[0];
-  var restService = layer.split(/\/*\d$/)[0];
-  var layerID = layer.split(/\/*\d/)[1];
+  
+  //Portal URL
+  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/03da2b89cb90479a8ef11567c63146c1_1"
+  var portalJsonUrl = portalURL + ".json"
+
+  //Initialize Data Variables
+  var portalJson;
+  var layerJsonURL;
+  var layer;
+  var restServiceArray;
+  var restService;
+  var layerID;
+  var shapefile;
+  
+
+  $.getJSON(portalJsonUrl, function(json){
+
+    //Define Data
+    portalJson = json;
+    layer = portalJson.data.url;
+    layerJsonURL = layer + "?f=pjson";
+    restServiceArray = layer.split(/\/*(?=\d$)/);
+    restService = restServiceArray[0];
+    layerID = restServiceArray[1];
+    shapefile = portalJsonUrl.split('.json')[0] + '.zip'
+
+    //Populate Metadata
+    $('#layer-name').text(portalJson.data.name);
+    $('#service-title').text(portalJson.data.name);
+    $('#description').text(portalJson.data.description);
+    $('#shape-download').text(shapefile);
+
+   });
 
   //Tab display control
   $('#myTab a').click(function (e) {
-  e.preventDefault();
-  $(this).tab('show');
-})
-  
-  //Populate Metadata
-  $.getJSON(jsonURL, function( data ) {
-    $('#layer-name').text(data.name);
-    $('#service-title').text(data.name);
-    $('#description').text(data.description);
-  });
+    e.preventDefault();
+    $(this).tab('show');
+  })
 
   $('#service').html("<a href='" + restService + "' target='_blank'>" + restService + "</a>")
 
-  //Map Control
+  //Activate the following once the map tab is clicked. 
   function loadMap(){
+
+    //Begin Map Control
     var map;
     require(["esri/map", 
       "esri/layers/ArcGISDynamicMapServiceLayer", 
       "esri/layers/ArcGISTiledMapServiceLayer",
+      "esri/layers/FeatureLayer",
+      "esri/tasks/query",
+      "esri/tasks/QueryTask",
       "dojo/domReady!"], 
 
     function(Map,
       ArcGISDynamicMapServiceLayer,
-      ArcGISTiledMapServiceLayer) {
+      ArcGISTiledMapServiceLayer,
+      Query,
+      QueryTask) {
       
     var service = new ArcGISDynamicMapServiceLayer(restService);
-    service.setVisibleLayers([0]);
+    service.setVisibleLayers([layerID]);
+    
     var basemap = new ArcGISTiledMapServiceLayer("http://gis.nola.gov:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
   
     map = new Map("nola-map", {
@@ -41,5 +71,9 @@ var jsonURL = "http://gis.nola.gov:6080/arcgis/rest/services/Staging/Historic/Ma
     });
       map.addLayer(basemap);
       map.addLayer(service);
-  });
+      
+      //This wont work cus you have to query 10,000 records at a time (look into paging in REST API documentation)
+
+    });
+
   };
