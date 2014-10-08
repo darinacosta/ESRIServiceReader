@@ -1,43 +1,83 @@
 <html>
 <head>
-  <link href="css/bootstrap.css" rel="stylesheet" type="text/css">
+  <title>Data Portal Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!--Custom CSS-->
   <link href="css/custom.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  <script src="http://js.arcgis.com/3.10/"></script>
+
+  <!-- Bootstrap CSS-->
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+  <!-- CSS for mapping components -->
+  <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">   
+  <link rel="stylesheet" type="text/css" href="http://esri.github.io/bootstrap-map-js/src/css/bootstrapmap.css">  
+
+  <!--Browser Dependent-->
+  <!-- HTML5 IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+      <script src="../assets/js/respond.min.js"></script>
+  <![endif]-->
+<?php header('Access-Control-Allow-Origin: *'); ?>
 </head>
 <body>
+
   <div id="banner"><a href="https://data.nola.gov/"><img src="img/logo.gif"></a></div>
-<div class="container">     
-<div class="span12">
-  <div id="title-container">
-    <div style="float:left;">
-      <h2><p id="service-title"></p></h2>
-    </div>
-    <div id="download-button">
-      <img src="img/download.png">
-    </div>
+
+  <!--Subheader-->
+  <div class="container">     
+    <div class="span12">
+      <div id="title-container">
+        <div style="float:left;">
+          <h2><p id="service-title"></p></h2>
+        </div>
+        <div id="download-button">
+          <img src="img/download.png">
+        </div>
+      </div>
+
+      <!--Nav Menu-->
+      <ul class="nav nav-tabs" id="myTab">
+        <li class="active"><a href="#meta">Metadata</a></li>
+        <li onclick="loadMap()"><a href="#maptab">Map</a></li>
+      </ul>
+
+      <!--Tab Content-->
+      <div class="tab-content">
+
+        <!--Metadata-->
+        <div class="tab-pane active" id="meta">
+          <p><b>Name:</b> <span id = "layer-name"></span></p>
+          <p><b>Description:</b> <span id = "description"></span><br></p>
+          <p><b>Service URL:</b> <span id = "service"></span><br></p>
+        </div>
+        
+        <!--Map View-->
+        <div class="tab-pane" id="maptab">
+          <div id="nola-map"></div>
+        </div>
+      </div>
+    </div> 
   </div>
-<ul class="nav nav-tabs" id="myTab">
-  <li class="active"><a href="#meta">Metadata</a></li>
-  <li onclick="loadMap()"><a href="#maptab">Map</a></li>
-</ul>
-<div class="tab-content">
-  <div class="tab-pane active" id="meta">
-    <p><b>Name:</b> <span id = "layer-name"></span></p>
-    <p><b>Description:</b> <span id = "description"></span><br></p>
-    <p><b>Service URL:</b> <span id = "service"></span><br></p>
-  </div>
-  <div class="tab-pane" id="maptab">
-    <div id="nola-map"></div>
-  </div>
-</div>
-</div> 
-</div>
 </body>
 <footer>
+
+  <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  
+  <!--JS to Load Responsive Map-->
+  <script>
+  var package_path = "//esri.github.com/bootstrap-map-js/src/js";
+  var dojoConfig = {
+    packages: [{
+        name: "application",
+        location: package_path
+      }]
+    };
+  </script>
+
+  <script src="http://js.arcgis.com/3.10/"></script>
   <script src="js/init.js"></script>
 </footer>
-
 </html>

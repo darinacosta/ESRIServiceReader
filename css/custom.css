@@ -7,9 +7,9 @@
   padding-top: 10px;
 }
 
-#nola-map, .map { 
+#nola-map { 
   width: 100%;
-  height: 600px;
+  height:90%;
 }
 
 #service-title {
