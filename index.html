@@ -61,17 +61,26 @@
 
         <!--Table View-->
         <div class="tab-pane" id="tabletab">
-          <div id="table-data">
-            <table>
-              <tr id="fieldnames">
-              </tr>
-            </table>
+          <p>
+            Total records: 
+            <span id="recordsInfo">0</span>
+              |  
+            
+            <button id="prev">Prev Page</button>
+              <span id="pageInfo"></span>  
+            
+            <button id="next">Next Page</button>
+          </p>
+
+          <!-- dgrid will be created in this div -->
+          <div id="grid"></div>
           </div>
         </div>
 
       </div>
     </div> 
   </div>
+  <div class="modal"><!-- Loading Image --></div>
 </body>
 <footer>
 

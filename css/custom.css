@@ -32,18 +32,46 @@
   padding-right: 20px;
 }
 
-#table-data{
-  height: auto;
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
-  padding: 20px 0px;
+#tabletab{
+  padding-top: 20px;
 }
 
-#table-data td{
-  padding:10px;
-  border: 1px solid lightgray;
+
+/*Table CSS*/
+
+#grid {
+  height: 336px;
+  width: 100%;
 }
+
+.field-name {
+  width: 200px;
+  font-size: .80em;
+  font-weight: normal;
+}
+
+.field-magnitude {
+  width: 50px;
+  font-size: .80em;
+  font-weight: normal;
+}
+
+.field-deaths {
+  width: 70px;
+  font-size: .80em;
+  font-weight: normal;
+}
+
+.field-date {
+  width: 70px;
+  font-size: .80em;
+  font-weight: normal;
+}
+
+#grid .dgrid-row-odd {
+  background: #F2F5F9;
+}
+
 
 
 
