@@ -21,8 +21,8 @@
 
     //Define Data
     portalJson = json;
-    layer = portalJson.data.url;
-    layerJsonURL = layer + "?f=pjson";
+    layer = "http://54.197.182.39:6080/arcgis/rest/services/Staging/DPW_TestMap/MapServer/1";
+    layerJsonURL = layer + "?callback=?&f=pjson";
     layerAttributesJsonURL = layer + "/query?where=1%3D1&outFields=*&callback=?&f=pjson"
     restServiceArray = layer.split(/\/*(?=\d$)/);
     restService = restServiceArray[0];
@@ -42,6 +42,18 @@
     e.preventDefault();
     $(this).tab('show');
   })
+
+  //Activate the following once the table tab is clicked.
+  function loadTable(){
+    console.log(layerJsonURL);
+    $.getJSON(layerJsonURL, function(json){
+      fields = []
+      for (var i = 0; i < json.fields.length; i += 1){
+        fields.push(json.fields[i].alias);
+        $('table tr#fieldnames').append("<td>" + json.fields[i].alias + "</td>");
+      }
+    });
+  }
 
   //Activate the following once the map tab is clicked. 
   function loadMap(){
@@ -66,7 +78,7 @@
     var service = new ArcGISDynamicMapServiceLayer(restService);
     service.setVisibleLayers([layerID]);
     
-    var basemap = new ArcGISTiledMapServiceLayer("http://gis.nola.gov:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
+    var basemap = new ArcGISTiledMapServiceLayer("http://54.197.182.39:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
   
     var map = BootstrapMap.create("nola-map", {
       center: [-90.030, 29.98], // longitude, latitude
@@ -77,7 +89,7 @@
       map.addLayer(service);
 
 
-    //Query Test
+    /*Query Test
     var queryTask = new QueryTask(layer);
     var query = new Query();
     query.where = "1=1";
@@ -92,7 +104,8 @@
     
       
     $.getJSON(layerAttributesJsonURL, function(json){console.log(json)});  
+    */
+  }); //End Map
 
-    });
 
-  };
+};

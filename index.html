@@ -41,6 +41,7 @@
       <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a href="#meta">Metadata</a></li>
         <li onclick="loadMap()"><a href="#maptab">Map</a></li>
+        <li onclick="loadTable()"><a href="#tabletab">Table</a></li>
       </ul>
 
       <!--Tab Content-->
@@ -57,6 +58,17 @@
         <div class="tab-pane" id="maptab">
           <div id="nola-map"></div>
         </div>
+
+        <!--Table View-->
+        <div class="tab-pane" id="tabletab">
+          <div id="table-data">
+            <table>
+              <tr id="fieldnames">
+              </tr>
+            </table>
+          </div>
+        </div>
+
       </div>
     </div> 
   </div>
