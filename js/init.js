@@ -131,7 +131,6 @@
         ///BEGIN PAGE CONTROL///
        ///------------------///
 
-
       // click listeners for prev/next page buttons
       on(dom.byId("prev"), "click", function() {
         queryRecordsByPage(pageInfo.currentPage - 1);
