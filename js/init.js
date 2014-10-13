@@ -136,9 +136,8 @@
         query.where = "1 = 1";
         featureLayer.queryIds(query, function (objectIds) {
           fetchRecords(objectIds);
-
-        }); //close queryIds
-      }); //close featureLayer.on
+        }); 
+      }); 
 
           
          ///==================///
@@ -163,7 +162,9 @@
           grid.setStore(null);
         }
       }
-
+      
+      /*gather feature layer metadata into a json object to 
+      populate the pageInfo and records info divs*/
       function updatePageInformation(objectIds, page) {
         pageInfo = {
           objectIds: objectIds,
@@ -187,7 +188,6 @@
           return;
         }
 
-        //grid.showMessage("Fetching records...");
         var begin = pageInfo.recordsPerPage * (pageNumber - 1);
         var end = begin + pageInfo.recordsPerPage;
 

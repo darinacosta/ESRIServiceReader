@@ -67,11 +67,17 @@
 /*Table CSS*/
 
 #grid {
-  height: 336px;
+  width:100%;
+  height: 450px;
 }
 
 #grid .dgrid-row-odd {
   background: #F2F5F9;
+}
+
+.dgrid-cell-padding {
+  padding: 3px;
+  width: 350px;
 }
 
 
