@@ -1,15 +1,8 @@
+
   //JQuery No Conflict
   (function ($) {
    $(document);
   }(jQuery));
-
-  //Loading GIF
-  $body = $("body");
-
-  $('table').on({
-    ajaxStart: function() { $body.addClass("loading");    },
-    ajaxStop: function() { $body.removeClass("loading"); }    
-  });
 
 
      /****************************************/
@@ -19,7 +12,7 @@
  /****************************************/
 
   //Portal URL
-  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/03da2b89cb90479a8ef11567c63146c1_0"
+  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/441632d85a2643cbbc23f7a81d7c3b98_0"
   var portalJsonUrl = portalURL + ".json"
 
   //Initialize Data Variables
@@ -38,6 +31,7 @@
 
     //Define Data
     portalJson = json;
+    //layer = "http://54.197.182.39:6080/arcgis/rest/services/Staging/DPW_TestMap/MapServer/1";
     layer = portalJson.data.url;
     console.log(layer);
     layerJsonURL = layer + "?callback=?&f=pjson";
@@ -48,12 +42,31 @@
     layerID = restServiceArray[1];
     shapefile = portalJsonUrl.split('.json')[0] + '.zip'
 
+    //Check if data fields are empty
+    function validateMeta(meta){
+      if (meta == ""){
+        return "<span class='empty-meta'>Empty.</span>"
+      }else{
+        return meta
+      }
+    }
+
     //Populate Metadata
-    $('#layer-name').text(portalJson.data.name);
-    $('#service-title').text(portalJson.data.name);
-    $('#description').text(portalJson.data.description);
-    $('#shape-download').text(shapefile);
-    $('#service').html("<a href='" + restService + "' target='_blank'>" + restService + "</a>")
+    var $loading = $('#loadingDiv').hide();
+    $(document)
+      .ajaxStart(function () {
+        $loading.show();
+      })
+      .ajaxStop(function () {
+        $('#layer-name').html("<b>Name:</b> " + validateMeta(portalJson.data.name));
+        $('#service-title').html(portalJson.data.name);
+        $('#description').html("<b>Description:</b> " + validateMeta(portalJson.data.description));
+        $('#shape-download').text(shapefile);
+        $('#service').html("<b>Service URL:</b> <a href='" + restService + "' target='_blank'>" + restService + "</a>");
+        $('#download-button').html("<a href='" + portalURL + ".zip" + "'><img src='img/download.png'></a>")
+        $loading.hide();
+        $('.container').fadeIn(1000);
+      });
   });
 
   //Tab display control
@@ -63,7 +76,7 @@
   })
      /****************************************/
     //////////////////////////////////////////
-   ////////////BEGIN TABLE TAB///////////////
+   ///////////////TABLE TAB//////////////////
   //////////////////////////////////////////
  /****************************************/
 
@@ -71,6 +84,7 @@
  https://developers.arcgis.com/javascript/jssamples/fl_paging.html*/
 
   function loadTable(){
+
     var featureLayer, pageInfo, grid;
     require(["esri/layers/FeatureLayer", 
       "esri/tasks/query", 
@@ -126,10 +140,10 @@
         }); //close queryIds
       }); //close featureLayer.on
 
-
-         ///__________________///
-        ///BEGIN PAGE CONTROL///
-       ///------------------///
+          
+         ///==================///
+        ///TABLE PAGE CONTROL///
+       ///==================///
 
       // click listeners for prev/next page buttons
       on(dom.byId("prev"), "click", function() {
@@ -205,11 +219,14 @@
 
      /****************************************/
     //////////////////////////////////////////
-   ////////////BEGIN MAP TAB/////////////////
+   /////////////////MAP TAB//////////////////
   //////////////////////////////////////////
  /****************************************/
 
   function loadMap(){
+
+    var $mapLoading = $('#mapLoadingDiv').hide();
+    $mapLoading.show();
 
     //Begin Map Control
     require(["esri/map", 
@@ -219,45 +236,60 @@
       "esri/layers/FeatureLayer",
       "esri/tasks/query",
       "esri/tasks/QueryTask",
+      "esri/dijit/Popup",
+      "esri/dijit/PopupTemplate",
+      "esri/dijit/InfoWindow",
+      "esri/InfoTemplate",
       "dojo/domReady!"], 
 
     function(Map,
       BootstrapMap,
       ArcGISDynamicMapServiceLayer,
       ArcGISTiledMapServiceLayer,
+      FeatureLayer,
       Query,
-      QueryTask) {
-      
-    var service = new ArcGISDynamicMapServiceLayer(restService);
-    service.setVisibleLayers([layerID]);
+      QueryTask,
+      Popup,
+      PopupTemplate,
+      InfoWindow,
+      InfoTemplate) {
     
-    var basemap = new ArcGISTiledMapServiceLayer("http://54.197.182.39:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
-  
+    //infowindow
+    var popup = new Popup({
+      offsetX:10,
+      offsetY:10,
+      zoomFactor:2
+    }, dojo.create("div"));
+
+    /*var infoWindow = new esri.dijit.InfoWindow({}, 
+      dojo.create("div"));
+      infoWindow.startup();*/
+    
+    //initialize map
     var map = BootstrapMap.create("nola-map", {
       center: [-90.030, 29.98], // longitude, latitude
       zoom: 12,
-      logo: false
+      logo: false,
+      infoWindow: popup
     });
+
+    var template = new InfoTemplate(portalJson.data.name + " attributes","${*}");
+    
+    //map layers
+    var service = new FeatureLayer(layer, {
+      infoTemplate: template,
+      outFields: ["*"]
+    });
+    var basemap = new ArcGISTiledMapServiceLayer("http://54.197.182.39:6080/arcgis/rest/services/Basemaps/BasemapNOLA3/MapServer");
+      
+    //add layers  
+    service.on("load", function(){
       map.addLayer(basemap);
       map.addLayer(service);
-
-
-    /*Query Test
-    var queryTask = new QueryTask(layer);
-    var query = new Query();
-    query.where = "1=1";
-    query.outFields = ["*"];
-    queryTask.execute(query, logQuery, function(error){
-      console.log(error);
-    });
-    
-    function logQuery(query){  
-      console.log('tested');
-    }
-    
+      $mapLoading.hide();
+      $('.container').fadeIn(1000);
+    })
       
-    $.getJSON(layerAttributesJsonURL, function(json){console.log(json)});  
-    */
   }); //End Map
 
 

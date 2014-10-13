@@ -1,14 +1,20 @@
 
+
 #banner {
   background-color: rgb(28, 38, 90);
-  height: 85px;
-  margin-bottom: 20px;
+  height: 90px;
+  margin-bottom: 5px;
   padding-left: 76px;
   padding-top: 10px;
 }
 
 #meta{
   padding-top:20px;
+}
+
+.empty-meta{
+  color:grey;
+  font-style:italic;
 }
 
 #nola-map { 
@@ -36,41 +42,38 @@
   padding-top: 20px;
 }
 
+#loadingDiv {
+    position: fixed; 
+    top: 60%; 
+    left: 50%; 
+    margin-left: -100px; 
+    margin-top: -93px; 
+}
+
+#mapLoadingDiv {
+    position: fixed; 
+    top: 70%; 
+    left: 50%; 
+    margin-left: -100px; 
+    margin-top: -93px; 
+    display:none;
+}
+
+.container{
+  display:none;
+}
+
 
 /*Table CSS*/
 
 #grid {
   height: 336px;
-  width: 100%;
-}
-
-.field-name {
-  width: 200px;
-  font-size: .80em;
-  font-weight: normal;
-}
-
-.field-magnitude {
-  width: 50px;
-  font-size: .80em;
-  font-weight: normal;
-}
-
-.field-deaths {
-  width: 70px;
-  font-size: .80em;
-  font-weight: normal;
-}
-
-.field-date {
-  width: 70px;
-  font-size: .80em;
-  font-weight: normal;
 }
 
 #grid .dgrid-row-odd {
   background: #F2F5F9;
 }
+
 
 
 
