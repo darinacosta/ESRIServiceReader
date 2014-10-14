@@ -12,7 +12,7 @@
  /****************************************/
 
   //Portal URL
-  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/8b7ff16472464dc2aca0452bf61c1e7c_0"
+  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/5fa121b4c2f34850a26f92adfd923be4_0"
   var portalJsonUrl = portalURL + ".json"
 
   //Initialize Data Variables
