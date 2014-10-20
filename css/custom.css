@@ -1,15 +1,23 @@
+html, body{
+  height: 100%;
+}
 
+#container{
+  min-height: 100%;
+  padding:0;
+  width:100%;
+}
 
 #banner {
   background-color: rgb(28, 38, 90);
   height: 90px;
   margin-bottom: 5px;
-  padding-left: 76px;
+  padding-left: 20px;
   padding-top: 10px;
 }
 
-#meta{
-  padding-top:20px;
+#meta, #tabletab{
+  padding: 30px 30px 0 30px;
 }
 
 .empty-meta{
@@ -18,8 +26,13 @@
 }
 
 #nola-map { 
-  width: 100%;
-  height:90%;
+  top: 222px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  width: auto;
+  height: auto;
 }
 
 #service-title {
@@ -30,6 +43,8 @@
   float: left;
   clear: none; 
   width:100%;
+  height:85px;
+  padding: 0 30px;
 }
 
 #download-button {

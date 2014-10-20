@@ -12,7 +12,7 @@
  /****************************************/
 
   //Portal URL
-  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/8b7ff16472464dc2aca0452bf61c1e7c_0"
+  var portalURL = "http://portal.nolagis.opendata.arcgis.com/datasets/4ce975f8f5cb4f9a928529039008ebf9_0"
   var portalJsonUrl = portalURL + ".json"
 
   //Initialize Data Variables
@@ -31,7 +31,6 @@
 
     //Define Data
     portalJson = json;
-    //layer = "http://54.197.182.39:6080/arcgis/rest/services/Staging/DPW_TestMap/MapServer/1";
     layer = portalJson.data.url;
     console.log(layer);
     layerJsonURL = layer + "?callback=?&f=pjson";
@@ -39,6 +38,7 @@
     layerObjectIDsJsonURL = layer + "/query?where=1%3D1&text=&objectIds=&callback=?&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=true&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=json"
     restServiceArray = layer.split(/\/*(?=\d$)/);
     restService = restServiceArray[0];
+    console.log(restService);
     layerID = restServiceArray[1];
     shapefile = portalJsonUrl.split('.json')[0] + '.zip'
 
@@ -80,9 +80,6 @@
   //////////////////////////////////////////
  /****************************************/
 
- /*Note: for paging functionality, I borrowed heavily from this Esri sample:
- https://developers.arcgis.com/javascript/jssamples/fl_paging.html*/
-
   function loadTable(){
 
     var featureLayer, pageInfo, grid;
@@ -109,7 +106,6 @@
       OnDemandGrid
     ) {
        
-
       featureLayer = new FeatureLayer(layer, {
         outFields:["*"]
       });
@@ -139,10 +135,14 @@
         }); 
       }); 
 
-          
+          ////////////////////////
          ///==================///
-        ///TABLE PAGE CONTROL///
+        /// TABLE PAGINATION ///
        ///==================///
+      ////////////////////////
+
+      /*Note: for paging functionality, I borrowed heavily from this Esri sample:
+      https://developers.arcgis.com/javascript/jssamples/fl_paging.html*/
 
       // click listeners for prev/next page buttons
       on(dom.byId("prev"), "click", function() {
@@ -183,7 +183,7 @@
       }
 
       function queryRecordsByPage(pageNumber) {
-        // check if the page number is valid
+        // Check if the page number is valid
         if (pageNumber < 1 || pageNumber > pageInfo.totalPages) {
           return;
         }
@@ -191,7 +191,7 @@
         var begin = pageInfo.recordsPerPage * (pageNumber - 1);
         var end = begin + pageInfo.recordsPerPage;
 
-        // create the query
+        // Create the query
         var query = new Query();
         query.objectIds = pageInfo.objectIds.slice(begin, end);
         query.outFields = ["*"];
@@ -209,7 +209,7 @@
         grid.store.setData(data);
         grid.refresh();
 
-        // update application state
+        // [current page]/[total pages]
         pageInfo.currentPage = pageNumber;
         dom.byId("pageInfo").innerHTML = pageInfo.currentPage + "/" + pageInfo.totalPages;
       }
@@ -260,10 +260,6 @@
       offsetY:10,
       zoomFactor:2
     }, dojo.create("div"));
-
-    /*var infoWindow = new esri.dijit.InfoWindow({}, 
-      dojo.create("div"));
-      infoWindow.startup();*/
     
     //initialize map
     var map = BootstrapMap.create("nola-map", {
@@ -289,6 +285,9 @@
       $mapLoading.hide();
       $('.container').fadeIn(1000);
     })
+
+    map.resize();
+    map.reposition();
       
   }); //End Map
 
