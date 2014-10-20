@@ -38,7 +38,6 @@
     layerObjectIDsJsonURL = layer + "/query?where=1%3D1&text=&objectIds=&callback=?&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=false&maxAllowableOffset=&geometryPrecision=&outSR=&returnIdsOnly=true&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&returnDistinctValues=false&f=json"
     restServiceArray = layer.split(/\/*(?=\d$)/);
     restService = restServiceArray[0];
-    console.log(restService);
     layerID = restServiceArray[1];
     shapefile = portalJsonUrl.split('.json')[0] + '.zip'
 
@@ -284,10 +283,13 @@
       map.addLayer(service);
       $mapLoading.hide();
       $('.container').fadeIn(1000);
-    })
+    });
 
-    map.resize();
-    map.reposition();
+    map.on("resize", function(){
+      map.resize();
+      map.reposition();
+      console.log("resized");
+    });
       
   }); //End Map
 
